@@ -13,7 +13,6 @@ const questions = [
     "Question 9 (A9)	Binary (0, 1)	S/he finds it easy to work out what someone is thinking or feeling just by looking at their face, (Child) S/he finds social situations easy, (Adolescent) I find it easy to work out what someone is thinking or feeling just by looking at their face, (Adult) Does your child use simple gestures? (e.g. wave goodbye) (Toddler)",
     "Question 10 (A10)	Binary (0, 1)	S/he finds it hard to make new friends, (Child, Adolescent) I find it difficult to work out peoples intentions, (Adult) Does your child stare at nothing with no apparent purpose? (Toddler)",
     "What is you age?",
-    "Q_CHAT",
     "What is your Ethinicty?",
     "Do you have Jaundice?",
     "Family member with ASD?",
@@ -100,7 +99,7 @@ const QuestionForm = () => {
             <div className="bg-white w-[80vw] h-[70vh] px-10 py-20 rounded-lg shadow-md transition-all duration-500 flex flex-col justify-center gap-4 lg:w-[60vw]">
                 <div onClick={handlePrev}>Prev</div>
                 <h2 className="mb-10 text-base">{currentQuestion + questions[currentQuestion - 1]}</h2>
-                {(currentQuestion <= 10 || currentQuestion == 14 || currentQuestion == 15) && <div className="flex w-full gap-4">
+                {(currentQuestion <= 10 || currentQuestion == 13 || currentQuestion == 14) && <div className="flex w-full gap-4">
                     <button onClick={handleNo} className="w-full py-2 px-4 rounded-md bg-red-500 text-white hover:bg-red-600">
                         No
                     </button>
@@ -126,7 +125,7 @@ const QuestionForm = () => {
                         <button className='p-2 border' onClick={handleNext}>Next</button>
                     </div>
                 }
-                {
+                {/* {
                     currentQuestion === 12 && <div onClick={() => {
                         setFormData(prev => {
                             const newData = [...prev];
@@ -135,9 +134,9 @@ const QuestionForm = () => {
                         });
                         handleNext()
                     }}>NEXT</div>
-                }
+                } */}
                 {
-                    currentQuestion === 16 && <select onChange={handleDropdownChange} className="border border-gray-300 rounded-md p-2 w-full transition-all duration-500">
+                    currentQuestion === 15 && <select onChange={handleDropdownChange} className="border border-gray-300 rounded-md p-2 w-full transition-all duration-500">
                         <option value={0}>None</option>
                         <option value={0.965876}>Family member</option>
                         <option value={0.003791}>Self</option>
@@ -145,7 +144,7 @@ const QuestionForm = () => {
                     </select>
                 }
                 {
-                    currentQuestion === 13 && <div className="flex w-full gap-4">
+                    currentQuestion === 12 && <div className="flex w-full gap-4">
                         <select onChange={handleDropdownChange} className="border border-gray-300 rounded-md p-2 w-full transition-all duration-500">
                             <option value={0}>None</option>
                             <option value={0.178368}>Middle Eastern</option>
@@ -163,7 +162,7 @@ const QuestionForm = () => {
                     </div>
                 }
                 {
-                    currentQuestion === 17 && <div className="flex w-full gap-4">
+                    currentQuestion === 16 && <div className="flex w-full gap-4">
                         <select onChange={handleDropdownChange} className="border border-gray-300 rounded-md p-2 w-full transition-all duration-500">
                             <option value={0}>None</option>
                             <option value={1.0}>Male</option>
