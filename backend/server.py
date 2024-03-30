@@ -7,10 +7,10 @@ from flask_cors import CORS
 # List to store loaded models
 models = []
 
-# File names of the .sav files
-model_files = ["model_AdaBoostClassifier.sav", "model_DecisionTreeClassifier.sav", "model_ExtraTreesClassifier.sav","model_KNearestNeighbor.sav","model_NaiveBayes.sav","model_RandomForestClassifier.sav","model_SGDClassifier.sav","model_SupportVectorMachine.sav" ]
+# File names of the .pickle files
+model_files = ["AdaBoostClassifier.pickle", "DecisionTreeClassifier.pickle", "ExtraTreesClassifier.pickle","KNearestNeighbor.pickle","NaiveBayes.pickle","RandomForestClassifier.pickle","SGDClassifier.pickle","SupportVectorMachine.pickle" ]
 
-# Load each serialized model from the .sav files
+# Load each serialized model from the .pickle files
 
 for model_file in model_files:
     with open('models/' + model_file, 'rb') as f:
