@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-import requests
 import pickle
 from collections import Counter
 from flask_cors import CORS
@@ -7,10 +6,10 @@ from flask_cors import CORS
 # List to store loaded models
 models = []
 
-# File names of the .pickle files
-model_files = ["AdaBoostClassifier.pickle", "DecisionTreeClassifier.pickle", "ExtraTreesClassifier.pickle","KNearestNeighbor.pickle","NaiveBayes.pickle","RandomForestClassifier.pickle","SGDClassifier.pickle","SupportVectorMachine.pickle" ]
+# File names of the .pkl files
+model_files = ["AdaBoostClassifier.pkl", "DecisionTreeClassifier.pkl", "ExtraTreesClassifier.pkl","KNearestNeighbor.pkl","NaiveBayes.pkl","RandomForestClassifier.pkl","SGDClassifier.pkl","SupportVectorMachine.pkl" ]
 
-# Load each serialized model from the .pickle files
+# Load each serialized model from the .pkl files
 
 for model_file in model_files:
     with open('models/' + model_file, 'rb') as f:
