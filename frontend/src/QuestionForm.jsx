@@ -2,23 +2,14 @@ import React, { useState } from 'react';
 import './Questionform.css'; // Import CSS for styling
 
 const questions = [
-    "S/he often notices small sounds when others do not, (Child, Adolescent) S/he notices patterns in things all the time, (Adult) Does your child look at you when you call his/her name? (Toddler)",
-    "S/he usually concentrates more on the whole picture, rather than the small detail, (child, Adolescent, Adults) How easy is it for you to get eye contact with your child? (Toddler)",
-    "In a social group, s/he can easily keep track of several different peoples conversations, (child, Adolescent) I find it easy to do more than one thing at once, (Adult) Does your child point to indicate that s/he wants something? (e.g. a toy that is out of reach) (Toddler)",
-    "S/he finds it easy to go back and forth between different activities, (child, Adolescent) If there is an interruption, s/he can switch back to what s/he was doing very quick, (Adult) Does your child point to share interest with you? (e.g. pointing at an interesting sight) (Toddler)",
-    "S/he doesnt know how to keep a conversation going with his/her peers, (child, Adolescent) I find it easy to read between the lines when someone is talking to me, (Adult) Does your child pretend? (e.g. care for dolls, talk on a toy phone) (Toddler)",
-    "Question 6 (A6)	Binary (0, 1)	S/he is good at social chit-chat, (child, Adolescent) I know how to tell if someone listening to me is getting bored, (Adult) Does your child follow where youre looking? (Toddler)",
-    "Question 7 (A7)	Binary (0, 1)	When s/he is read a story, s/he finds it difficult to work out the characters intentions or feelings, (Child) When s/he was younger, s/he used to enjoy playing games involving pretending with other children, (Adolescent) When Im reading a story, I find it difficult to work out the characters intentions, (Adult) If you or someone else in the family is visibly upset, does your child show signs of wanting to comfort them? (e.g. stroking hair, hugging them (Toddler)",
-    "Question 8 (A8)	Binary (0, 1)	When s/he was in preschool, s/he used to enjoy playing games involving pretending with other children, (Child) S/he finds it difficult to imagine what it would be like to be someone else, (Adolescent) I like to collect information about categories of things (e.g. types of car, types of bird, types of train, types of plant, etc.), (Adult) Would you describe your childs first words as: (Toddler)",
-    "Question 9 (A9)	Binary (0, 1)	S/he finds it easy to work out what someone is thinking or feeling just by looking at their face, (Child) S/he finds social situations easy, (Adolescent) I find it easy to work out what someone is thinking or feeling just by looking at their face, (Adult) Does your child use simple gestures? (e.g. wave goodbye) (Toddler)",
-    "Question 10 (A10)	Binary (0, 1)	S/he finds it hard to make new friends, (Child, Adolescent) I find it difficult to work out peoples intentions, (Adult) Does your child stare at nothing with no apparent purpose? (Toddler)",
-    "What is you age?",
-    "What is your Ethinicty?",
-    "Do you have Jaundice?",
-    "Family member with ASD?",
-    "Who completed the test",
-    "Gender?"
-];
+    "I often notice small sounds when others do not.", "When I’m reading a story, I find it difficult to work out the characters’ intentions.", "I find it easy to read between the lines when someone is talking to me.", "I usually concentrate more on the whole picture, rather than the small details.", "I know how to tell if someone listening to me is getting bored.", "I find it easy to do more than one thing at once.", "I find it easy to work out what someone is thinking or feeling just by looking at their face.", "If there is an interruption, I can switch back to what I was doing very quickly.", "I like to collect information about categories of things.", "I find it difficult to work out people’s intentions.", "What is you age?",
+    "",
+    "What is your Ethinicty? Choose from below",
+    "Do you or any family member have Jaundice?",
+    "Is there any member in your family who has/had ASD?",
+    "Who completed the test?",
+    "What is your Gender?"
+]
 
 const QuestionForm = () => {
     const [currentQuestion, setCurrentQuestion] = useState(1);
@@ -35,7 +26,10 @@ const QuestionForm = () => {
     };
 
     const handlePrev = () => {
-        if (currentQuestion > 0) {
+        if (currentQuestion == 13) {
+            setCurrentQuestion(prev => prev - 2);
+        }
+        else if (currentQuestion > 1) {
             setCurrentQuestion(prev => prev - 1);
         } else {
             // Submit form data or navigate to next step
@@ -87,6 +81,12 @@ const QuestionForm = () => {
             });
             const data = await response.json();
             console.log(data);
+            if (data.majority_prediction == 1) {
+                alert("You have ASD");
+            }
+            else {
+                alert("You don't have ASD");
+            }
             // Handle response data
         } catch (error) {
             console.error("Error:", error);
@@ -98,8 +98,8 @@ const QuestionForm = () => {
         <div className="question-container bg-gray-100 min-h-screen flex justify-center items-center">
             <div className="bg-white w-[80vw] h-[70vh] px-10 py-20 rounded-lg shadow-md transition-all duration-500 flex flex-col justify-center gap-4 lg:w-[60vw]">
                 <div onClick={handlePrev}>Prev</div>
-                <h2 className="mb-10 text-base">{currentQuestion + questions[currentQuestion - 1]}</h2>
-                {(currentQuestion <= 10 || currentQuestion == 13 || currentQuestion == 14) && <div className="flex w-full gap-4">
+                <h2 className="mb-10 text-base">{((currentQuestion > 11) ? (currentQuestion - 1) : currentQuestion) + "). " + questions[currentQuestion - 1]}</h2>
+                {(currentQuestion <= 10 || currentQuestion == 14 || currentQuestion == 15) && <div className="flex w-full gap-4">
                     <button onClick={handleNo} className="w-full py-2 px-4 rounded-md bg-red-500 text-white hover:bg-red-600">
                         No
                     </button>
@@ -122,7 +122,16 @@ const QuestionForm = () => {
                             }}
                             className="border border-gray-300 rounded-md p-2 w-full transition-all duration-500"
                         />
-                        <button className='p-2 border' onClick={handleNext}>Next</button>
+                        <button className='p-2 border' onClick={() => {
+
+                            setCurrentQuestion(prev => prev + 1);
+                            setFormData(prev => {
+                                const newData = [...prev];
+                                newData[11] = 3;
+                                return newData;
+                            });
+                            setCurrentQuestion(prev => prev + 1);
+                        }}>Next</button>
                     </div>
                 }
                 {/* {
@@ -136,7 +145,7 @@ const QuestionForm = () => {
                     }}>NEXT</div>
                 } */}
                 {
-                    currentQuestion === 15 && <select onChange={handleDropdownChange} className="border border-gray-300 rounded-md p-2 w-full transition-all duration-500">
+                    currentQuestion === 16 && <select onChange={handleDropdownChange} className="border border-gray-300 rounded-md p-2 w-full transition-all duration-500">
                         <option value={0}>None</option>
                         <option value={0.965876}>Family member</option>
                         <option value={0.003791}>Self</option>
@@ -144,7 +153,7 @@ const QuestionForm = () => {
                     </select>
                 }
                 {
-                    currentQuestion === 12 && <div className="flex w-full gap-4">
+                    currentQuestion === 13 && <div className="flex w-full gap-4">
                         <select onChange={handleDropdownChange} className="border border-gray-300 rounded-md p-2 w-full transition-all duration-500">
                             <option value={0}>None</option>
                             <option value={0.178368}>Middle Eastern</option>
@@ -162,7 +171,7 @@ const QuestionForm = () => {
                     </div>
                 }
                 {
-                    currentQuestion === 16 && <div className="flex w-full gap-4">
+                    currentQuestion === 17 && <div className="flex w-full gap-4">
                         <select onChange={handleDropdownChange} className="border border-gray-300 rounded-md p-2 w-full transition-all duration-500">
                             <option value={0}>None</option>
                             <option value={1.0}>Male</option>
