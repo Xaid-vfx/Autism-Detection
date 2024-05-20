@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import pickle
 from collections import Counter
 from flask_cors import CORS
+import numpy as np
 
 # List to store loaded models
 models = []
@@ -32,18 +33,24 @@ def predict():
         # Get test case from the request
         test_case = request.json['test_case']
 
+        all_predictions = []
+
         # Perform prediction using the loaded models
 
         for idx, model in enumerate(models):
             predictions = model.predict(test_case)
             print(f"Model {idx+1} predictions:", predictions)
+            all_predictions.append(predictions)
+
+        all_predictions_np = np.array(all_predictions)
 
         # Determine the majority prediction
         majority_prediction = Counter(predictions).most_common(1)[0][0]
 
         # Construct response
         response = {
-            'majority_prediction': int(majority_prediction)
+            'majority_prediction': int(majority_prediction),
+            'predictions': all_predictions_np.tolist()
         }
 
         return jsonify(response)
