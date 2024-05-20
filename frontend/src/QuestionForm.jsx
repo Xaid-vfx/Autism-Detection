@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import './Questionform.css'; // Import CSS for styling
+import { IoChevronBack } from "react-icons/io5";
 
 const questions = [
     "I often notice small sounds when others do not.", "When I’m reading a story, I find it difficult to work out the characters’ intentions.", "I find it easy to read between the lines when someone is talking to me.", "I usually concentrate more on the whole picture, rather than the small details.", "I know how to tell if someone listening to me is getting bored.", "I find it easy to do more than one thing at once.", "I find it easy to work out what someone is thinking or feeling just by looking at their face.", "If there is an interruption, I can switch back to what I was doing very quickly.", "I like to collect information about categories of things.", "I find it difficult to work out people’s intentions.", "What is you age?",
     "",
     "What is your Ethinicty? Choose from below",
-    "Do you or any family member have Jaundice?",
+    "Did you or any family member have Jaundice at birth?",
     "Is there any member in your family who has/had ASD?",
     "Who completed the test?",
     "What is your Gender?"
 ]
 
-const QuestionForm = () => {
+const QuestionForm = (props) => {
     const [currentQuestion, setCurrentQuestion] = useState(1);
     const [formData, setFormData] = useState(Array(questions.length).fill());
 
@@ -70,6 +71,7 @@ const QuestionForm = () => {
 
     async function handleSubmit() {
         const input = [formData];
+        props.isSubmitted(input);
         console.log(input);
         try {
             const response = await fetch("http://127.0.0.1:5000/predict", {
@@ -81,12 +83,21 @@ const QuestionForm = () => {
             });
             const data = await response.json();
             console.log(data);
-            if (data.majority_prediction == 1) {
-                alert("You have ASD");
+            if (data.majority_prediction == 0) {
+                return (
+                    <div className="question-container min-h-screen flex flex-col items-center bg-slate-50">
+                        <div className='text-4xl font-semibold my-8 text-[#505050]'>
+                            Autism Detection
+                        </div>
+                    </div>
+                )
             }
-            else {
-                alert("You don't have ASD");
-            }
+            // if (data.majority_prediction == 1) {
+            //     alert("You have ASD");
+            // }
+            // else {
+            //     alert("You don't have ASD");
+            // }
             // Handle response data
         } catch (error) {
             console.error("Error:", error);
@@ -95,15 +106,19 @@ const QuestionForm = () => {
 
 
     return (
-        <div className="question-container bg-gray-100 min-h-screen flex justify-center items-center">
-            <div className="bg-white w-[80vw] h-[70vh] px-10 py-20 rounded-lg shadow-md transition-all duration-500 flex flex-col justify-center gap-4 lg:w-[60vw]">
-                <div onClick={handlePrev}>Prev</div>
-                <h2 className="mb-10 text-base">{((currentQuestion > 11) ? (currentQuestion - 1) : currentQuestion) + "). " + questions[currentQuestion - 1]}</h2>
+        <div className="question-container min-h-screen flex flex-col items-center bg-slate-50">
+            <div className='text-4xl font-semibold my-8 text-[#505050]'>
+                Autism Detection
+            </div>
+            <div className='bg-[#65BCCF] text-white w-full text-center py-14 text-3xl font-light'>Take our quick autism test</div>
+            <div className="bg-white w-[80vw] h-[50vh] my-10 px-10 py-10 rounded-lg shadow-xl transition-all duration-500 flex flex-col gap-4 lg:w-[60vw]">
+                <div className='text-4xl text-[#812061] mt-14 text-center'>{"Question " + ((currentQuestion > 11) ? (currentQuestion - 1) : currentQuestion)}</div>
+                <h2 className="mb-10 text-lg text-center text-[#505050]">{questions[currentQuestion - 1]}</h2>
                 {(currentQuestion <= 10 || currentQuestion == 14 || currentQuestion == 15) && <div className="flex w-full gap-4">
-                    <button onClick={handleNo} className="w-full py-2 px-4 rounded-md bg-red-500 text-white hover:bg-red-600">
+                    <button onClick={handleNo} className="w-full py-2 px-4 rounded-md text-[#812061] text-lg font-medium border border-[#812061] hover:bg-slate-100">
                         No
                     </button>
-                    <button onClick={handleYes} className="w-full py-2 px-4 rounded-md bg-blue-500 text-white hover:bg-blue-600">
+                    <button onClick={handleYes} className="w-full py-2 px-4 rounded-md text-[#812061] text-lg font-medium border border-[#812061] hover:bg-slate-100">
                         Yes
                     </button>
                 </div>}
@@ -122,7 +137,7 @@ const QuestionForm = () => {
                             }}
                             className="border border-gray-300 rounded-md p-2 w-full transition-all duration-500"
                         />
-                        <button className='p-2 border' onClick={() => {
+                        <button className='px-4 py-2 rounded-md text-white bg-[#65BCCF] border' onClick={() => {
 
                             setCurrentQuestion(prev => prev + 1);
                             setFormData(prev => {
@@ -167,7 +182,7 @@ const QuestionForm = () => {
                             <option value={0.007582}>Mixed</option>
                             <option value={0.036018}>Others</option>
                         </select>
-                        <div className='border p-2' onClick={handleNext}>Next</div>
+                        <div className='px-4 py-2 cursor-pointer rounded-md text-white bg-[#65BCCF] border' onClick={handleNext}>Next</div>
                     </div>
                 }
                 {
@@ -178,11 +193,13 @@ const QuestionForm = () => {
                             <option value={0.0}>Female</option>
                         </select>
 
-                        <div className='border p-2' onClick={handleSubmit}>Submit</div>
+                        <div className='px-4 py-2 rounded-md text-white bg-[#65BCCF] border cursor-pointer' onClick={handleSubmit}>Submit</div>
 
                     </div>
                 }
+                <div className='flex absolute w-[120px] gap-2 items-center border text-white rounded-lg px-2 py-2 bg-[#65BCCF] cursor-pointer' onClick={handlePrev}><IoChevronBack className="text-xl" /> Previous</div>
             </div>
+
         </div>
     );
 };
